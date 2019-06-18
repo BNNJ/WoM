@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "wom.h"
 
@@ -59,24 +60,29 @@ int			main(int argc, char **argv)
 	int		chosen_script = 0;
 	char	*script;
 
-	initscr();
-	cbreak();
-	noecho();
-	keypad(stdscr, true);
-	curs_set(0);
-	refresh();
-	if ((draw_menu(argc, argv)) != 0)
-		chosen_script = controls(argc);
-	refresh();
-	curs_set(1);
-	endwin();
-	if (chosen_script > 0 && chosen_script < argc)
+	if (argc > 1)
 	{
-		if ((script = ft_strjoin_f("sh ", argv[chosen_script], 0)))
+		initscr();
+		cbreak();
+		noecho();
+		keypad(stdscr, true);
+		curs_set(0);
+		refresh();
+		if ((draw_menu(argc, argv)) != 0)
+			chosen_script = controls(argc);
+		refresh();
+		curs_set(1);
+		endwin();
+		if (chosen_script > 0 && chosen_script < argc)
 		{
-			system(script);
-			free(script);
+			if ((script = ft_strjoin_f("sh ", argv[chosen_script], 0)))
+			{
+				system(script);
+				free(script);
+			}
 		}
 	}
+	else
+		printf("T'es tellement pas pro\n");
 	return (EXIT_SUCCESS);
 }
