@@ -5,11 +5,8 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-# define OFFSET_X	2
-# define OFFSET_Y	2
-
 # define SCRIPT_DIR	"./scripts/" /* don't forget the '/' at the end */
-
+# define SPLASH		"./splash.txt"
 /*
 ** Displays the scripts given as arguments in a menu, and executes the
 ** selected one
@@ -32,5 +29,7 @@ char		**parse_args(int argc, char **argv);
 int			get_nb_entries(char **entries);
 char		**parse_dir();
 
+/* Splash screen */
+int			splash(void);
 
 #endif

@@ -10,7 +10,8 @@ SRC			=	$(addprefix $(SRC_DIR)/,$(SRCS))
 SRCS		=	wom.c			\
 				tools.c			\
 				arg_handling.c	\
-				dir_handling.c
+				dir_handling.c	\
+				splash.c
 
 OBJ_DIR		=	./obj
 
