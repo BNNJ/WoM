@@ -8,7 +8,7 @@ Place your script files ( .sh only ) inside the *scripts* directory.
 Inside the WoM directory launch ./wom.
 Select the script you want to use and press *Enter* to launch it.
 
-## Comportement
+## Behavior
 
 By default the executable scans his working directory for a *scripts* diectory
 
