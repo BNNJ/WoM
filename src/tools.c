@@ -1,6 +1,52 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define FREE_S1	1
+#define FREE_S2	2
+
+/*
+** extracts the directory path out of a binary path
+*/
+
+char	*extract_dir(char *arg)
+{
+	char	*path = NULL;
+	size_t	path_len = 0;
+	int		i = 0;
+
+	while (arg[i])
+	{
+		if (arg[i] == '/')
+			path_len = i;
+		++i;
+	}
+	return (path = strndup(arg, path_len + 1));
+}
+
+/*
+** returns the number of entries to be displayed
+*/
+
+int			get_nb_entries(char **entries)
+{
+	int		nb_entries = 0;
+
+	while (entries[nb_entries])
+		++nb_entries;
+	return (nb_entries);
+}
+
+/*
+** concatenate s1 and s2
+** frees the strings passed as opt:
+** FREE_S1 : free s1
+** FREE_S2 : free s2
+** can be or'd (FREE_S1 | FREE_S2) to free both
+** pass 0 if you don't want to free anything
+**
+** returns a pointer to a dynaically allocated string
+*/
+
 char		*ft_strjoin_f(char *s1, char *s2, int opt)
 {
 	char	*str;
@@ -28,6 +74,30 @@ char		*ft_strjoin_f(char *s1, char *s2, int opt)
 		free(s2);
 	return (str);
 }
+
+/*
+** returns the index of the first occurence of c in str.
+** if c is not found, -1 is returned
+*/
+
+int			get_char_index(char c, char *str)
+{
+	int	i = 0;
+
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		++i;
+	}
+	return (-1);
+}
+
+/*
+** extracts the name of a file out of its path (the part after the last '/')
+**
+** returns a pointer to a dynaically allocated string
+*/
 
 char		*get_name(char *path)
 {

@@ -5,8 +5,12 @@
 # include <stdlib.h>
 # include <stdio.h>
 
-# define SCRIPT_DIR	"./scripts/" /* don't forget the '/' at the end */
-# define SPLASH		"./splash.txt"
+# define DEFAULT_DIR	"./scripts/"	/* don't forget the '/' at the end */
+# define SPLASH			"./splash.txt"	/* splash screen to be displayed */
+
+# define F_D			1				/* directory option */
+# define F_H			2				/* help */
+
 /*
 ** Displays the scripts given as arguments in a menu, and executes the
 ** selected one
@@ -21,6 +25,8 @@
 /* tools */
 char		*get_name(char *path);
 char		*ft_strjoin_f(char *s1, char *s2, uint8_t opt);
+int			get_char_index(char c, char *str);
+char		*extract_dir(char *arg);
 
 /* argument handling */
 char		**parse_args(int argc, char **argv);
@@ -31,5 +37,8 @@ char		**parse_dir();
 
 /* Splash screen */
 int			splash(void);
+
+/* options */
+int			parse_options(int argc, char **argv, int *opt);
 
 #endif

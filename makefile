@@ -11,7 +11,8 @@ SRCS		=	wom.c			\
 				tools.c			\
 				arg_handling.c	\
 				dir_handling.c	\
-				splash.c
+				splash.c		\
+				options.c
 
 OBJ_DIR		=	./obj
 

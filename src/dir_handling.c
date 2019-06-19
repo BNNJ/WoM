@@ -18,26 +18,47 @@ static int	is_sh(char *name, int len)
 }
 #endif
 
-int			get_nb_entries(char **entries)
+static char	*get_script_dir(int argc, char **argv, int opt)
 {
-	int		nb_entries = 0;
+	char	*dir = NULL;
+	int		i = 0;
 
-	while (entries[nb_entries])
-		++nb_entries;
-	return (nb_entries);
+	if (opt & F_D)
+	{
+		if (argc >= 3)
+			dir = strdup(argv[2]);
+		else
+			dprintf(2, "wom: no directory specified\n");
+	}
+	else
+	{
+		dir = extract_dir(argv[0]);
+		dir = ft_strjoin_f(dir, DEFAULT_DIR, 1);
+	}
+	while (dir[i])
+		++i;
+	if (dir[i - 1] != '/')
+		dir = ft_strjoin_f(dir, "/", 1);
+	return (dir);
 }
 
-char		**parse_dir(void)
+char		**parse_dir(int argc, char **argv, int opt)
 {
-	struct dirent	*de;
-	DIR				*dp;
+	struct dirent	*de = NULL;
+	DIR				*dp = NULL;
 	int				nb_entries = 0;
-	char			**entries;
-	int				name_len;
+	char			**entries = NULL;
+	int				name_len = 0;
 	int				i = 0;
+	char			*script_dir = NULL;
 
-	if (!(dp = opendir(SCRIPT_DIR)))
+	if (!(script_dir = get_script_dir(argc, argv, opt)))
 		return (NULL);
+	if (!(dp = opendir(script_dir)))
+	{
+		dprintf(2, "wom: invalid directory: %s\n", script_dir);
+		return (NULL);
+	}
 	while ((de = readdir(dp)))
 		++nb_entries;
 	if (!(entries = malloc((nb_entries + 1) * sizeof(char*))))
@@ -57,7 +78,7 @@ char		**parse_dir(void)
 		if (is_sh(de->d_name, name_len))
 #endif
 		{
-			if (!(entries[i] = ft_strjoin_f(SCRIPT_DIR, de->d_name, 0)))
+			if (!(entries[i] = ft_strjoin_f(script_dir, de->d_name, 0)))
 			{
 				closedir(dp);
 				return (NULL);
@@ -66,6 +87,7 @@ char		**parse_dir(void)
 		}
 	}
 	entries[i] = NULL;
+	free(script_dir);
 	closedir(dp);
 	return (entries);
 }

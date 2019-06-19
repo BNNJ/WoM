@@ -13,5 +13,6 @@ char	**parse_args(int argc, char **argv)
 			return (NULL);
 		++i;
 	}
+	entries[i] = NULL;
 	return (entries);
 }

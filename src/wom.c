@@ -101,25 +101,29 @@ static void	free_entries(char **entries, int nb_entries)
 	free(entries);
 }
 
+static int	usage(void)
+{
+	printf("usage:\n");
+	return (EXIT_SUCCESS);
+}
+
 int			main(int argc, char **argv)
 {
 	int		chosen_script = 0;
 	char	*script;
 	char	**entries;
 	int		nb_entries;
+	int		opt = 0;
 
-	if (argc > 1)
-	{
-		if (!(entries = parse_args(argc, argv)))
-			return (EXIT_FAILURE);
-		nb_entries = argc - 1;
-	}
-	else
-	{
-		if (!(entries = parse_dir()))
-			return (EXIT_FAILURE);
-		nb_entries = get_nb_entries(entries);
-	}
+	if (!(parse_options(argc, argv, &opt)))
+		return (EXIT_FAILURE);
+	if (opt & F_H)
+		return (usage());
+	if (!(entries = (argc == 1 || opt & F_D)
+		? parse_dir(argc, argv, opt)
+		: parse_args(argc, argv)))
+		return (EXIT_FAILURE);
+	nb_entries = get_nb_entries(entries);
 	init_ncurses();
 	splash();
 	if (!(get_sizes(entries, nb_entries)))
