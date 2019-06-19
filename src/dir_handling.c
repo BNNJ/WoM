@@ -35,6 +35,8 @@ static char	*get_script_dir(int argc, char **argv, int opt)
 		dir = extract_dir(argv[0]);
 		dir = ft_strjoin_f(dir, DEFAULT_DIR, 1);
 	}
+	if (dir == NULL)
+		return (NULL);
 	while (dir[i])
 		++i;
 	if (dir[i - 1] != '/')
