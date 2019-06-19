@@ -22,7 +22,7 @@ If you want to put Wom inside your */usr/local/bin* directory or another path th
 
 ## Ueseful Tools
 
-(Text to Ascii generator)[http://patorjk.com/software/taag/]
+[Text to Ascii generator](http://patorjk.com/software/taag/)
 
 ## Todo
 
