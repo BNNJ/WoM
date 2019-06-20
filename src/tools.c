@@ -1,8 +1,40 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <sys/stat.h>
 
 #define FREE_S1	1
 #define FREE_S2	2
+
+int		is_sh(char *name)
+{
+	struct stat	st;
+	int			len = strlen(name);
+	int			i = 0;
+	int			name_start;
+
+	while (name[i])
+	{
+		if (name[i] == '/')
+			name_start = i + 1;
+		++i;
+	}
+	if (name[name_start] == '.')
+		return (0);
+	if ((stat(name, &st)) != 0)
+	{
+		dprintf(2, "wom: %s doesn't exist\n", name);
+		return (0);
+	}
+	if (!S_ISREG(st.st_mode))
+	{
+		dprintf(2, "wom: %s is not a regular file\n", name);
+		return (0);
+	}
+	return (name[len - 3] == '.'
+		&& name[len - 2] == 's'
+		&& name[len - 1] == 'h');
+}
 
 /*
 ** extracts the directory path out of a binary path

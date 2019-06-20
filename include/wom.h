@@ -27,6 +27,7 @@ char		*get_name(char *path);
 char		*ft_strjoin_f(char *s1, char *s2, uint8_t opt);
 int			get_char_index(char c, char *str);
 char		*extract_dir(char *arg);
+int			is_sh(char *name);
 
 /* argument handling */
 char		**parse_args(int argc, char **argv);

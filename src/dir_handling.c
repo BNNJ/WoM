@@ -1,22 +1,6 @@
 #include <dirent.h>
+#include <sys/stat.h>
 #include "wom.h"
-
-#ifdef _DIRENT_HAVE_D_TYPE
-static int	is_sh(char *name, int len, unsigned char type)
-{
-	return (type == DT_REG
-		&& name[len - 3] == '.'
-		&& name[len - 2] == 's'
-		&& name[len - 1] == 'h');
-}
-#else
-static int	is_sh(char *name, int len)
-{
-	return (name[len - 3] == '.'
-		&& name[len - 2] == 's'
-		&& name[len - 1] == 'h');
-}
-#endif
 
 static char	*get_script_dir(int argc, char **argv, int opt)
 {
@@ -32,15 +16,17 @@ static char	*get_script_dir(int argc, char **argv, int opt)
 	}
 	else
 	{
-		dir = extract_dir(argv[0]);
+		if (!(dir = extract_dir(argv[0])))
+			return (NULL);
 		dir = ft_strjoin_f(dir, DEFAULT_DIR, 1);
 	}
-	if (dir == NULL)
-		return (NULL);
-	while (dir[i])
-		++i;
-	if (dir[i - 1] != '/')
-		dir = ft_strjoin_f(dir, "/", 1);
+	if (dir)
+	{
+		while (dir[i])
+			++i;
+		if (dir[i - 1] != '/')
+			dir = ft_strjoin_f(dir, "/", 1);
+	}
 	return (dir);
 }
 
@@ -50,7 +36,7 @@ char		**parse_dir(int argc, char **argv, int opt)
 	DIR				*dp = NULL;
 	int				nb_entries = 0;
 	char			**entries = NULL;
-	int				name_len = 0;
+	char			*entry;
 	int				i = 0;
 	char			*script_dir = NULL;
 
@@ -71,22 +57,18 @@ char		**parse_dir(int argc, char **argv, int opt)
 	rewinddir(dp);
 	while ((de = readdir(dp)))
 	{
-		name_len = 0;
-		while (de->d_name[name_len])
-			++name_len;
-#ifdef _DIRENT_HAVE_D_TYPE
-		if (is_sh(de->d_name, name_len, de->d_type))
-#else
-		if (is_sh(de->d_name, name_len))
-#endif
+		if (!(entry = ft_strjoin_f(script_dir, de->d_name, 0)))
 		{
-			if (!(entries[i] = ft_strjoin_f(script_dir, de->d_name, 0)))
-			{
-				closedir(dp);
-				return (NULL);
-			}
+			closedir(dp);
+			return (NULL);
+		}
+		if (is_sh(entry))
+		{
+			entries[i] = entry;
 			++i;
 		}
+		else
+			free(entry);
 	}
 	entries[i] = NULL;
 	free(script_dir);
